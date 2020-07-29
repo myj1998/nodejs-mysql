@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<!-- trim过滤掉无用的空格 -->
+			<textarea rows="10" cols="60" v-model.trim="text"></textarea>
+			<p>你还可以输入{{restText}}个字</p>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					text: ''
+				},
+				computed: {
+					restText: function() {
+						return 300 - this.text.length;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<component-a></component-a>
+		</div>
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//局部注册组件
+			var componentB = {
+				template: `
+				<fieldset>
+					<legend>组件B</legend>
+					B组件内容
+				</fieldset>`
+			}
+
+			var componentA = {
+				props: [],
+				components: {
+					componentB
+				},
+				template: `
+				<fieldset>
+					<legend>组件A</legend>
+					A组件内容
+					<component-b></component-b>
+				</fieldset>`
+			}
+
+			var app = new Vue({
+				el: '#app',
+				components: {
+					componentA
+				}
+			});
+		</script>
+	</body>
+</html>

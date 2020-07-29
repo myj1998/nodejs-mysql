@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			a {
+				text-decoration: none;
+			}
+
+			.ellipsis-gt4 {
+				overflow: hidden;
+				display: -webkit-box;
+				-webkit-line-clamp: 4;
+				-webkit-box-orient: vertical;
+			}
+
+			table {
+				border-collapse: collapse;
+			}
+
+			td,
+			th {
+				border: 1px solid #ccc;
+				padding: 15px 20px;
+
+			}
+
+			tr td:nth-child(1) {
+				width: 200px;
+			}
+
+			tr td:nth-child(2)>img {
+				width: 200px;
+				height: 120px;
+				border-radius: 4px;
+				box-shadow: 0 0 8px 0 black;
+			}
+
+			tr td:nth-child(3) {
+				width: 150px
+			}
+
+			tr td:nth-child(4) {
+				width: 200px;
+			}
+
+			tr td:nth-child(5) {
+				width: 200px
+			}
+
+			tr td:nth-child(6) {}
+
+			tr td:nth-child(7) {
+				width: 100px
+			}
+
+			.aaa-enter {
+				opacity: 0;
+			}
+
+			.aaa-enter-active {
+				transition: all 2s;
+			}
+
+			.aaa-enter-to {}
+
+
+			/* 出场3个 */
+			.aaa-leave {}
+
+			.aaa-leave-active {
+				transition: all 2s;
+			}
+
+			.aaa-leave-to {
+				opacity: 0;
+			}
+
+			/* edit弹层样式 */
+			.edit {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+
+			.edit-content {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				background-color: #fff;
+				padding: 40px 100px;
+			}
+
+			.edit-enter {
+				transform: scale(0);
+			}
+
+			.edit-enter-active {
+				transition: all 2s;
+			}
+
+			.edit-enter-to {}
+
+
+			/* 出场3个 */
+			.edit-leave {}
+
+			.edit-leave-active {
+				transition: all 2s;
+			}
+
+			.edit-leave-to {
+				transform: scale(1);
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<table border="1px" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th>表题</th>
+						<th>图片</th>
+						<th>分类</th>
+						<th>创建时间</th>
+						<th>最后更新时间</th>
+						<th>内容</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody is="transition-group" name="aaa">
+					<tr v-for="item in list" :key='item.id'>
+						<td>
+							<h5 v-text="item.title" class="ellipsis-gt4"></h5>
+						</td>
+						<td><img :src="item.main_photo" alt=""></td>
+						<td>{{item.cate_1st_name}}-{{item.cate_2nd_name}}</td>
+						<td v-text="item.create_time"></td>
+						<td v-text="item.update_time"></td>
+						<td>
+							<p v-text="item.description" class="ellipsis-gt4"></p>
+						</td>
+						<td>
+							<a href="#" @click="remove(item.id)">删除</a>
+							<a href="#">修改</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<transition name="edit">
+				<div class="edit" v-show="edit.isEdit">
+					<div class="edit-content">
+						<!-- 一级分类 -->
+						<select name="" id="" v-model="edit.model.cate_1st">
+							<option :value="0">--请选择--</option>
+							<option v-for="item in categoryList1st" :key='item.id' :value="item.id" v-text="item.name"></option>
+						</select>
+						-
+						<!-- 二级分类 -->
+						<select name="" id="" v-model="edit.model.cate_2nd">
+							<option :value="0">--请选择--</option>
+							<option v-for="item in categoryList2nd" :key='item.id' :value="item.id" v-text="item.name"></option>
+						</select>
+					</div>
+				</div>
+			</transition>
+
+		</div>
+
+
+		<script src="../js/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/index5.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

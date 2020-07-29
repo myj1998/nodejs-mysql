@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<form action="" method="">
+			<p>
+				<input type="file" accept="image/*" id='upload' />
+			</p>
+			<p>
+				<img id="preview" src="" alt="">
+			</p>
+		</form>
+
+		<script type="text/javascript">
+			//查找元素
+			var oUpload = document.getElementById("upload");
+			var oPreview = document.getElementById('preview');
+			
+			// 事件绑定:绑定change事件
+			oUpload.addEventListener("change", function() {
+				//获取File对象
+				var oFile = this.files[0];
+				// 预览图片
+				// FileReader读取器可以读取文件
+				var reader = new FileReader();
+				// 读取oFile，readAsDataURL: 将文件读取为DataURL
+				reader.readAsDataURL(oFile);
+				// onload事件:文件读取完成成功时触发
+				reader.onload = function() {
+					// console.log(1)
+					//将图片属性赋值成Base64
+					oPreview.src = reader.result;
+					//清空value值
+					oUpload.value = '';
+				}
+				// 上传图片文件时使用formData比较好
+				var formData = new FormData(); //等价于form标签对象化
+				formData.append('file', oFile);  //追加数据
+				formData.append('type', 'common');
+
+				var ajax = new XMLHttpRequest();
+				ajax.open('POST', '/upload/common/', true);
+				ajax.send(formData);
+				ajax.onreadystatechange = function() {
+					if (ajax.readyState == 4) {
+						var res = JSON.parse(ajax.responseText);
+						if (res.status) {
+							alert(res.msg);
+						} else {
+							alert(res.msg);
+						}
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

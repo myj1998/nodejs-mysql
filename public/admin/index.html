@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" href="index.css">
+		<title></title>
+	</head>
+	<body>
+		<div id='root'>
+			<div v-if='list.length === 0'>
+				暂无相关数据..
+			</div>
+			<table v-else>
+				<caption>
+					<span>用户列表</span>
+					<button class="add" @click='beginAdd'>新增</button>
+				</caption>
+				<thead>
+					<tr>
+						<th>用户名</th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>电话</th>
+						<th>邮箱</th>
+						<th>头像</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr v-for="item in list" :key="item.id">
+						<td v-text="item.username"></td>
+						<td v-text="item.fullname"></td>
+						<td v-text="item.sex"></td>
+						<td v-text="item.tel"></td>
+						<td v-text="item.email"></td>
+						<td><img :src="item.avatar" alt=""></td>
+						<td>
+							<a href="#">删除</a>
+							<a href="#" @click='beginUpdate(item)'>编辑</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class='edit-wrapper' v-show='edit.isEdit'>
+				<form action="" class="edit-form">
+					<label for="username">用户名:</label>
+					<input type="text" id="username" v-model='edit.model.username'><br>
+					
+					<template v-if='edit.type'>
+						<label for="password">密码:</label>
+						<input type="text" id='password' v-model='edit.model.password'><br>
+					</template>
+					
+					<label for="fullname">姓名:</label>
+					<input type="text" id="fullname" v-model='edit.model.fullname'><br>
+					
+					<label for="sex">性别:</label>
+					<input name='sex' type="radio" value='男' v-model='edit.model.sex'> 男
+					<input name='sex' type="radio" value='女' v-model='edit.model.sex'> 女 <br>
+					
+					<label for="tel">电话:</label>
+					<input type="text" id="tel" v-model.number='edit.model.tel'><br>
+					
+					<label for="email">邮箱:</label>
+					<input type="email" id="email" v-model.number='edit.model.email'><br>
+					
+					<template v-if='!edit.type'>
+						<label for="avatar">头像:</label>
+						<div>
+							<div class='avatar-old'>
+								<!-- 显示当前头像 -->
+								<img :src="edit.oldAvatar" alt="" />
+								<span>当前avatar</span>
+							</div>
+							<div class='avatar-preview' v-show='edit.oldAvatar !== edit.model.avatar'>
+								<!-- 显示要更改成的头像 -->
+								<img :src="edit.model.avatar" alt="" />
+								<span>新的avatar</span>
+							</div>
+							<div class='avatar-upload'>
+								<input type="file" accept='image/*' @change='uploadChangeHandler' />
+								<!-- 将默认头像设为要更改的头像 -->
+								<a href="#" 
+									v-show='edit.oldAvatar !== edit.defaultAvatar && edit.model.avatar !== edit.defaultAvatar'
+									@click='edit.model.avatar = edit.defaultAvatar'>使用默认图片</a>
+								<a href="#" 
+									v-show='edit.oldAvatar !== edit.model.avatar'
+									@click='edit.model.avatar = edit.oldAvatar'>使用原图片</a>
+							</div>
+						</div>
+					</template>					
+					
+					<input type="button" value="保存" @click='save' />
+					<input type="button" value="退出" @click='cancelEdit' />
+				</form>
+			</div>
+		</div>
+		
+		<script src='../js/jQuery-3.4.0.js'></script>
+		<script src='../js/vue.js'></script>
+		<script src='index.js'></script>
+	</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			* {
+				padding: 0;
+				margin: 0;
+			}
+
+			ul {
+				list-style: none;
+			}
+
+			a {
+				text-decoration: none;
+			}
+
+			table {
+				border-collapse: collapse;
+				margin: 0 auto;
+			}
+
+			td,
+			th {
+				border: 1px solid #ccc;
+				padding: 15px 20px;
+
+			}
+
+			tr td:nth-child(1) {
+				width: 50px;
+			}
+
+			tr td:nth-child(2)>img {
+				width: 100px;
+				height: 80px;
+				border-radius: 4px;
+				box-shadow: 0 0 8px 0 black;
+			}
+
+			tr td:nth-child(3) {
+				width: 100px;
+				text-align: center;
+			}
+
+			tr td:nth-child(4) {
+				width: 100px;
+				text-align: center;
+			}
+
+			tr td:nth-child(6) {
+				width: 120px
+			}
+
+			.aaa-enter {
+				opacity: 0;
+			}
+
+			.aaa-enter-active {
+				transition: all 2s;
+			}
+
+			.aaa-enter-to {}
+
+
+			/* 出场3个 */
+			.aaa-leave {}
+
+			.aaa-leave-active {
+				transition: all 2s;
+			}
+
+			.aaa-leave-to {
+				opacity: 0;
+			}
+
+			.edit {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+
+			.edit-content {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				background-color: #fff;
+				padding: 40px 100px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<table border="1px" cellspacing="0" cellpadding="0">
+				<thead>
+					<tr>
+						<th>用户名</th>
+						<th>头像</th>
+						<th>姓名</th>
+						<th>性别</th>
+						<th>手机号</th>
+						<th>邮箱</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody is="transition-group" name="aaa">
+					<tr v-for="item in list" :key='item.id'>
+						<td>
+							<h5 v-text="item.username"></h5>
+						</td>
+						<td><img :src="item.avatar" alt=""></td>
+						<td v-text="item.fullname"></td>
+						<td v-text="item.sex"></td>
+						<td v-text="item.tel"></td>
+						<td v-text="item.email"></td>
+						<td>
+							<a href="#" @click="remove(item.id)">删除</a>
+							<a href="#" @click="edit(item.id)">修改</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="edit" v-show="isEdit">
+				<div class="edit-content">
+					<label for="username">用户</label>
+					<input type="text" id='username' v-model="model.username"><br>
+
+					<label for="fullname">姓名</label>
+					<input type="text" id='fullname' v-model="model.fullname"><br>
+
+					<label for="sex">性别</label>
+					<input type="text" id='sex' v-model="model.sex"><br>
+
+					<label for="tel">手机</label>
+					<input type="text" id='tel' v-model="model.tel"><br>
+
+					<label for="email">邮箱</label>
+					<input type="text" id='email' v-model="model.email"><br>
+
+					<input type="button" value="保存" @click="save"/>
+					<input type="button" value="取消" @click="cancelEdit" />
+				</div>
+			</div>
+		</div>
+
+
+		<script src="../js/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="js/index6.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

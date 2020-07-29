@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			#app {
+				width: 60%;
+				margin: 0 auto;
+			}
+
+			.time {
+				width: 400px;
+				height: 40px;
+				font-size: 25px;
+			}
+
+			#app button {
+				height: 45px;
+				width: 80px;
+				font-size: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<form action="">
+				<input class="time" type="text" v-model="time" />
+				<button type="button" @click="countdown">开始</button>
+				<input class="time" type="text" v-model="laze" />
+			</form>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					time: 0,
+					laze: 0,
+					temp: {}
+				},
+				methods: {
+					countdown: function() {
+						clearInterval(this.temp);
+						var that = this;
+						that.laze = that.time;
+						that.temp = setInterval(function() {
+							if (that.laze == 0) {
+								clearInterval(that.temp);
+							} else {
+								that.laze = that.laze - 1;
+							}
+						}, 1000);
+					}
+				},
+
+			});
+		</script>
+	</body>
+</html>

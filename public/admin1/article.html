@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.content {
+				border-collapse: collapse;
+				min-width: 1500px;
+			}
+
+			.ellispid-gt4 {
+				display: -webkit-box;
+				-webkit-box-orient: vertical;
+				-webkit-line-clamp: 3;
+				overflow: hidden;
+			}
+
+			.content th,
+			.content td {
+				padding: 10px 15px;
+				border: 1px solid #00B7FF;
+				border-collapse: collapse;
+			}
+
+			.content tr td:nth-child(1) {
+				width: 150px;
+			}
+
+			.content tr td:nth-child(2) {}
+
+			.content tr td:nth-child(2)>img {
+				width: 200px;
+				height: 150px;
+				border-radius: 5px;
+				box-shadow: 0 0 4px 2px #E0E0E0;
+			}
+
+			.content tr td:nth-child(3) {
+				width: 150px;
+				text-align: center;
+			}
+
+			.content tr td:nth-child(4) {
+				width: 200px;
+			}
+
+			.content tr td:nth-child(5) {
+				width: 200px;
+			}
+
+			.content tr td:nth-child(6) {}
+
+			.content tr td:nth-child(7)>a {
+				padding: 10px;
+			}
+
+			.content tr td:nth-child(7) {
+				width: 150px;
+				text-align: center;
+			}
+
+			.aaa-entert {
+				opacity: 0;
+			}
+
+			.edit-content tr td {
+				width: 50px !important;
+			}
+
+			.aaa-enter-active {
+				transition: all 1s;
+			}
+
+			.aaa-enter-to {}
+
+			.aaa-leave {}
+
+			.aaa-leave-active {
+				transition: all 1s;
+			}
+
+			.aaa-leave-to {
+				opacity: 0;
+			}
+
+			/* edit 弹层样式 */
+			.edit {
+				position: fixed;
+				left: 0;
+				top: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.5);
+			}
+
+			.edit-content {
+				position: absolute;
+				left: 20%;
+				top: 40%;
+				background-color: white;
+			}
+
+			.edit-enter {
+				transform: scale(0);
+			}
+
+			.edit-enter-active {
+				transition: all 1s;
+			}
+
+			.edit-enter-to {
+				transform: scale(1);
+			}
+
+			.edit-leave {
+				transform: scale(1);
+			}
+
+			.edit-leave-active {
+				transition: all 1s;
+			}
+
+			.edit-leave-to {
+				transform: scale(0);
+			}
+
+			.edit-content table {
+				border-collapse: collapse;
+			}
+
+			.edit-content table td th {}
+
+			.edit-content td input,
+			.edit-content td select {
+				border: 0px;
+			}
+
+			.edit-content button {
+				width: 100%;
+				height: 100%;
+				border: 0px;
+				color: white;
+				background-color: orange;
+			}
+
+			.edit-content tr:nth-child(3) {
+				display: flex;
+				flex-direction: row;
+			}
+
+			.edit-content img {
+				width: 100px;
+				height: 100px;
+			}
+
+			.edit-content .preview {
+				width: 100px;
+				height: 100px;
+			}
+
+			.edit-content .addimg input {
+				font-size: 0px;
+				width: 100%;
+				height: 100%;
+				background-color: orange;
+			}
+
+			.edit-content .addimg {
+				width: 70px;
+				height: 100px;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<transition name="eidt">
+				<div class="edit" v-show="edit.isEdit">
+					<div class="edit-content">
+						<table border="">
+							<thead>
+								<tr>
+									<!-- 一级分类 -->
+									<th>
+										一级标题
+									</th>
+									<!-- 二级分类 -->
+									<th>
+										二级标题
+									</th>
+									<th>
+										文章标题
+									</th>
+									<th>
+										文章摘要
+									</th>
+									<!-- <th>
+										文章内容
+									</th> -->
+									<th>
+										文章主图
+									</th>
+									<th>
+										<button type="button" @click="cancel">取消</button>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>
+										<select name="" v-model="edit.model.cate_1st">
+											<option :value="0">-请选择-</option>
+											<option v-for="item in categoryList1st" :value="item.id" v-text="item.name"></option>
+										</select>
+									</td>
+									<td>
+										<select name="" v-model="edit.model.cate_2nd">
+											<option :value="0">-请选择-</option>
+											<option v-for="item in categoryList2st" :value="item.id" v-text="item.name"></option>
+										</select>
+									</td>
+									<td>
+										<input type="text" v-model="edit.model.title" />
+									</td>
+									<td>
+										<input type="text" v-model="edit.model.description" />
+									</td>
+									<!-- <td>
+										<input type="text" v-model="edit.model.content" />
+									</td> -->
+									<td>
+										<input type="file" accept="image/*" @change="uploadChangeHandler" />
+									</td>
+									<td>
+										<button type="button" @click="save">保存</button>
+									</td>
+								</tr>
+							</tbody>
+							<!-- <div class="preview" v-if="previewImg !== ''">
+								 文章预览 <img :src="previewImg">
+							</div> -->
+						</table>
+					</div>
+				</div>
+			</transition>
+			<table class="content">
+				<caption>
+					<h1>文章列表</h1>
+					<a href="#" @click="edit.isEdit = true;edit.isAdd=true;">增加</a>
+				</caption>
+				<thead>
+					<tr>
+						<th>标题</th>
+						<th>文章图片</th>
+						<th>分类</th>
+						<th>发布时间</th>
+						<th>更新时间</th>
+						<th>摘要</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+
+				<tbody is="transition-group" name="aaa">
+					<tr v-for="item in list" :key="item.id">
+						<td>
+							<h5 v-text="item.title" class="ellispid-gt4"></h5>
+						</td>
+						<td><img :src="item.main_photo"></td>
+						<td><span v-text="item.cate_1st_name"></span>-<span v-text="item.cate_2nd_name"></td>
+						<td v-text="item.create_time"></td>
+						<td v-text="item.update_time"></td>
+						<td>
+							<p v-text="item.description" class="ellispid-gt4"></p>
+						</td>
+						<td>
+							<a href="#" @click="enterEdit(item.id)">修改</a>
+							<a href="#" @click="remove(item.id)">删除</a>
+						</td>
+					</tr>
+				</tbody>
+
+			</table>
+		</div>
+		<script src="../js/jquery-3.2.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script src="article.js" type="text/javascript" charset="utf-8"></script>
+	</body>
+</html>

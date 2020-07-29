@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<p>{{message}}</p>
+			<!-- 等价于 -->
+			<p v-text="message"></p>
+			<button v-on:click="message = '你好,vue!' " type="button">简介事件绑定</button>
+			<button @click="handleClick" type="button">复杂事件绑定</button>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: "#app",
+				data: {
+					message: 'Holle Word'
+				},
+				methods: {
+					handleClick: function() {
+						if (this.message == 'Holle Word') {
+							this.message = '你好,vue!'
+						} else {
+							this.message = 'Holle Word'
+						}
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

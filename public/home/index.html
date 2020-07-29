@@ -1,0 +1,786 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>CMS管理系统</title>
+		<link rel="stylesheet" type="text/css" href="../stylesheets/rest.css" />
+		<link rel="stylesheet" type="text/css" href="afternoon.css"/>
+		<link rel="stylesheet" type="text/css" href="index.css" />
+		<style type="text/css">
+			ul.cms-menu {}
+
+			ul.cms-menu>li {
+				text-indent: 40px;
+				height: 40px;
+				line-height: 40px;
+			}
+
+			ul.cms-menu>li>a {
+				color: #000000;
+			}
+
+			ul.cms-menu>li>a.router-link-active {
+				color: red;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<div class="top">
+				CMS管理系统
+			</div>
+			<div class="content_menu">
+				<div class="left">
+					<cms-menu />
+				</div>
+				<div class="right">
+					<router-view></router-view>
+				</div>
+			</div>
+		</div>
+		<template id="cms-menu">
+			<ul class="cms-menu ">
+				<li>
+					<router-link to="/article"> 文章管理</router-link>
+				</li>
+				<li>
+					<router-link to="/admin">用户管理</router-link>
+				</li>
+			</ul>
+		</template>
+		<!-- 引入vue框架 -->
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入vue-router -->
+		<script src="../js/vue-router.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入jQuery -->
+		<script src="../js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="home.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//自定义vue组件
+			Vue.component('cms-menu', {
+				//template指明了组件对应的html模板内容
+				template: "#cms-menu"
+			});
+		</script>
+		<template id="article">
+			<div class="article">
+				<transition name="eidt">
+					<div class="edit" v-show="edit.isEdit">
+						<div class="edit-content">
+							<table border="" >
+								<thead>
+									<tr>
+										<!-- 一级分类 -->
+										<th>
+											一级标题
+										</th>
+										<!-- 二级分类 -->
+										<th>
+											二级标题
+										</th>
+										<th>
+											文章标题
+										</th>
+										<th>
+											文章摘要
+										</th>
+										<!-- <th>
+											文章内容
+										</th> -->
+										<th>
+											文章主图
+										</th>
+										<th>
+											<button type="button" @click="cancel">取消</button>
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+									<tr>
+										<td>
+											<select name="" v-model="edit.model.cate_1st">
+												<option :value="0">-请选择-</option>
+												<option v-for="item in categoryList1st" :value="item.id" v-text="item.name"></option>
+											</select>
+										</td>
+										<td>
+											<select name="" v-model="edit.model.cate_2nd">
+												<option :value="0">-请选择-</option>
+												<option v-for="item in categoryList2st" :value="item.id" v-text="item.name"></option>
+											</select>
+										</td>
+										<td>
+											<input type="text" v-model="edit.model.title" />
+										</td>
+										<td>
+											<input type="text" v-model="edit.model.description" />
+										</td>
+										<!-- <td>
+											<input type="text" v-model="edit.model.content" />
+										</td> -->
+										<td>
+											<input type="file" accept="image/*" @change="uploadChangeHandler" />
+										</td>
+										<td>
+											<button type="button" @click="save">保存</button>
+										</td>
+									</tr>
+								</tbody>
+								<!-- <div class="preview" v-if="previewImg !== ''">
+									 文章预览 <img :src="previewImg">
+								</div> -->
+							</table>
+						</div>
+					</div>
+				</transition>
+				<table class="content">
+					<caption>
+						<h1>文章列表</h1>
+						<a href="javascript:void(0)" @click="edit.isEdit = true;edit.isAdd=true;">增加</a>
+					</caption>
+					<thead>
+						<tr>
+							<th>标题</th>
+							<th>图片</th>
+							<th>分类</th>
+							<th>发布时间</th>
+							<th>更新时间</th>
+							<th>内容</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+
+					<tbody is="transition-group" name="aaa">
+						<tr v-for="item in list" :key="item.id">
+							<td>
+								<h5 v-text="item.title" class="ellispid-gt4"></h5>
+							</td>
+							<td><img :src="item.main_photo"></td>
+							<td><span v-text="item.cate_1st_name"></span>-<span v-text="item.cate_2nd_name"></td>
+							<td v-text="item.create_time"></td>
+							<td v-text="item.update_time"></td>
+							<td>
+								<p v-text="item.description" class="ellispid-gt4"></p>
+							</td>
+							<td><a href="javascript:void(0)" @click="enterEdit(item.id)">修改</a><a href="javascript:void(0)" @click="remove(item.id)">删除</a></td>
+						</tr>
+					</tbody>
+
+				</table>
+			</div>
+			</div>
+		</template>
+		<script type="text/javascript">
+			var Article = Vue.extend({
+				template: "#article",
+				data:function(){
+					return {
+						previewImg: '',
+						list: [],
+						categoryList: [],
+						edit: {
+							isEdit: false,
+							type: true,
+							isAdd: true,
+							model: {
+								cate_1st_name: 0,
+								cate_2nd_name: 0,
+								cate_1st: 0,
+								cate_2nd: 0,
+								title: "",
+								description: "",
+								main_photo: "",
+								content: "",
+								create_time: "",
+								update_time: "",
+								id: 0,
+							}
+						}
+					}
+				},
+				created: function() {
+					var that = this;
+					//一般在这里发送ajax请求页面需要的初始数据
+					$.ajax({
+						url: "/article/list?pagesize=5&pageindex=1",
+						type: "get",
+						success: function(res) {
+							that.list = res.data;
+						}
+				
+					});
+					//获取所有的分类
+					$.ajax({
+						url: "/category/list",
+						type: "get",
+						success: function(res) {
+							that.categoryList = res.data;
+						}
+				
+					});
+				},
+				computed: {
+					//获取一级列表无父级分类的列表（父级id==0）
+					categoryList1st: function() {
+						//filter
+						var result = [];
+						this.categoryList.forEach(function(item) {
+							if (item.parent_id === 0) {
+								result.push(item);
+							}
+						});
+						return result;
+					},
+					//根据所选中的一级列表 来获取对应的二级列表
+					categoryList2st: function() {
+						var result = [];
+						if (this.edit.model.cate_1st !== 0) {
+							// 定义一个that 来指向this  
+							//因为 遍历函数中的this指的是当前对象
+							var that = this;
+							this.categoryList.forEach(function(item) {
+								//判断此对象的父级id是否等于所选中的id
+								if (item.parent_id === that.edit.model.cate_1st) {
+									result.push(item);
+								}
+							});
+						}
+						return result;
+					},
+				},
+				methods: {
+					//删除
+					remove: function(id) {
+						//询问用户是否删除
+						if (!confirm("是否真删？")) return;
+						var that = this;
+						//发送ajax
+						$.ajax({
+							url: "/article/delete",
+							type: "post",
+							data: {
+								id: id
+							},
+							success: function(res) {
+								//找下标
+								for (var i = 0; i < that.list.length; i++) {
+									if (that.list[i].id === id) break;
+								}
+								//根据下标从数组中删除
+								that.list.splice(i, 1);
+								//提示用户删除成功
+								alert("删除成功！");
+							}
+						});
+					},
+					//取消
+					cancel: function() {
+						this.edit.model = {
+							cate_1st_name: 0,
+							cate_2nd_name: 0,
+							cate_1st: 0,
+							cate_2nd: 0,
+							title: "",
+							description: "",
+							main_photo: "",
+							content: "",
+							create_time: "",
+							update_time: "",
+							id: 0,
+						};
+						this.edit.isEdit = false;
+					},
+					//开始修改
+					enterEdit: function(id) {
+						this.edit.model = {
+							cate_1st_name: 0,
+							cate_2nd_name: 0,
+							cate_1st: 0,
+							cate_2nd: 0,
+							title: "",
+							description: "",
+							main_photo: "",
+							content: "",
+							create_time: "",
+							update_time: "",
+							id: 0,
+						};
+						var that = this;
+						this.edit.isAdd = false;
+						this.edit.isEdit = true;
+						$.ajax({
+							url: "/article/detail",
+							type: "get",
+							data: {
+								id: id
+							},
+							success: function(res) {
+								for (var i = 0; i < that.list.length; i++) {
+									if (that.list[i].id === id) break;
+								}
+								that.edit.model.id = that.list[i].id;
+								that.edit.model.cate_1st = that.list[i].cate_1st;
+								that.edit.model.cate_2nd = that.list[i].cate_2nd;
+								that.edit.model.title = that.list[i].title;
+								that.edit.model.description = that.list[i].description;
+								that.edit.model.main_photo = that.list[i].main_photo;
+								that.edit.model.create_time = that.list[i].create_time;
+								that.edit.model.update_time = that.list[i].update_time;
+								that.edit.model.content = res.data.content;
+							}
+				
+						});
+					},
+					//增加
+					save: function() {
+						if (this.edit.isAdd) {
+							this._addData();
+						} else {
+							this._editData();
+						}
+						this.edit.isEdit = false;
+					},
+					//上传图片
+					uploadChangeHandler: function(e) {
+						//预览
+						var that = this;
+						var reader = new FileReader();
+						//判断数据类型  object
+						console.log(typeof reader);
+						reader.onload = function() {
+							console.log(this);
+							that.edit.model.main_photo = this.result;
+							//this会返回一个对象 对象里边有 result的属性  包含图片的地址
+						}
+						//将
+						reader.readAsDataURL(e.target.files[0]);
+						this.file = e.target.files[0]
+						var fd = new FormData();
+						fd.append("file", this.file);
+						fd.append("type", "common")
+						//上传到服务器
+						$.ajax({
+							url: "/upload/common/",
+							type: "post",
+							data: fd,
+							contentType: false,
+							processData: false,
+							success: function(res) {
+								//返回一个正确的图片储存地址
+								that.edit.model.main_photo = res.data;
+								console.log(that.edit.model);
+							}
+				
+						});
+					},
+				
+					//重新获取数据 然后在页面显示并且
+					_reget: function(item) {
+						var that = this;
+						$.ajax({
+							url: "/article/list?pagesize=10&pageindex=1",
+							type: "get",
+							success: function(res) {
+								that.list = res.data;
+								that.edit.model.item = that.list[0].item;
+								console.log(that.list[0]);
+								that.edit.model = {
+									cate_1st_name: 0,
+									cate_2nd_name: 0,
+									cate_1st: 0,
+									cate_2nd: 0,
+									title: "",
+									description: "",
+									main_photo: "",
+									content: "",
+									create_time: "",
+									update_time: "",
+									id: 0,
+								}
+							}
+						});
+					},
+					//增加
+					_addData: function() {
+						var that = this;
+						$.ajax({
+							url: "/article/add",
+							type: "post",
+							data: this.edit.model,
+							success: function(res) {
+								if (res.status) {
+									console.log(res);
+									for (var i = 0; i < that.list.length; i++) {
+										if (that.list[i].id === that.edit.model.id) break;
+									}
+									var first = that.edit.model.cate_1st - 1;
+									var second = that.edit.model.cate_2nd - 1;
+									that.edit.model.cate_1st_name = that.categoryList[first].name;
+									that.edit.model.cate_2nd_name = that.categoryList[second].name;
+									that.list.push(that.edit.model);
+									alert(res.msg);
+									var item = "create_time";
+									that._reget(item);
+								}
+							}
+						});
+					},
+					//修改
+					_editData: function() {
+						var id = this.edit.model.id;
+						var that = this;
+						$.ajax({
+							url: "/article/edit",
+							type: "post",
+							data: this.edit.model,
+							success: function(res) {
+								if (res.status) {
+									for (var i = 0; i < that.list.length; i++) {
+										if (that.list[i].id === id) break;
+									}
+									console.log(res);
+									var first = that.edit.model.cate_1st - 1;
+									var second = that.edit.model.cate_2nd - 1;
+									that.edit.model.cate_1st_name = that.categoryList[first].name;
+									that.edit.model.cate_2nd_name = that.categoryList[second].name;
+									that.list.splice(i, 1, that.edit.model);
+									alert(res.msg);
+									var item = "update_time";
+									that._reget(item);
+								}
+							}
+						});
+					}
+				
+				}
+				
+			});
+		</script>
+		<template id="cms-admin">
+			<div class="cms-admin">
+				<div v-if="list.length===0">
+					暂无相关数据..
+				</div>
+				<table border="" v-else>
+					<caption>
+						<h1>用户列表</h1>
+						<a href="javascript:void(0)" @click="beginAdd">新增</a>
+					</caption>
+					<thead>
+						<tr>
+							<th>用户名</th>
+							<th>姓名</th>
+							<th>性别</th>
+							<th>电话</th>
+							<th>邮箱</th>
+							<th>头像</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody is="transition-group" name='edit'>
+						<tr v-for="item in list" :key='item.id'>
+							<td v-text="item.username"></td>
+							<td v-text="item.fullname"></td>
+							<td v-text="item.sex"></td>
+							<td v-text="item.tel"></td>
+							<td v-text="item.email"></td>
+							<td class="photo"><img :src="item.avatar"></td>
+							<td>
+								<a href="javascript:void(0)">删除</a>
+								<a href="javascript:void(0)" @click="beginUpdate(item)">编辑</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<div class="edit-wrapper" v-show="edit.isEdit">
+					<form action="" class="edit-form">
+						<label for="username">用户名:</label>
+						<input type="text" id="username" v-model='edit.model.username'><br>
+						<template v-if="edit.type">
+							<label for="password">密码:</label>
+							<input type="text" id="password" v-model='edit.model.password'><br>
+						</template>
+
+
+						<label for="fullname">姓名:</label>
+						<input type="text" id="fullname" v-model='edit.model.fullname'><br>
+
+						<label for="sex">性别:</label>
+						<input name="sex" type="radio" value="男" v-model="edit.model.sex">男
+						<input name="sex" type="radio" value="女" v-model="edit.model.sex">女
+						<br>
+						<label for="tel">电话:</label>
+						<input type="text" id="tel" v-model.number='edit.model.tel'><br>
+
+						<label for="email">邮箱:</label>
+						<input type="text" id="email" v-model.number='edit.model.email'><br>
+
+						<template v-if="!edit.type">
+							<label for="avatar">头像:</label>
+							<div>
+								<div class="avatar-old">
+									<!-- 显示当前头像 -->
+									<img :src="edit.oldAvatar">
+									<span>当前头像</span>
+								</div>
+								<div class="avatar-preview" v-show="edit.oldAvatar!==edit.model.avatar">
+									<!-- 显示要更改的头像 -->
+									<img :src="edit.model.avatar">
+									<span>新的头像</span>
+								</div>
+								<div class="avatar-upload">
+									<input type="file" accept="image/*" @change="uploadChangeHandler">
+									<!-- 将默认头像设为要更改的头像 -->
+									<a href="javascript:void(0)" v-show="edit.oldAvatar!==edit.defaultAvatar&&edit.model.avatar!==edit.defaultAvatar"
+									 @click="edit.model.avatar=edit.defaultAvatar">使用默认图片</a>
+									<a href="javascript:void(0)" v-show="edit.oldAvatar!==edit.model.avatar" @click="edit.model.avatar=edit.oldAvatar">使用原图片</a>
+								</div>
+							</div>
+						</template><br>
+						<input type="button" value="保存" @click="save">
+						<input type="button" value="退出" @click="cancelEdit">
+					</form>
+				</div>
+			</div>
+		</template>
+		<script type="text/javascript">
+			var admin = Vue.extend({
+				template: "#cms-admin",
+				data: function() {
+					return {
+						list: [],
+						edit: {
+							defaultAvatar: '../images/avatar/default.jpg',
+							isEdit: false,
+							type: true, //标识新增还是修改，新增为true，修改为false
+							model: {
+								id: 0,
+								username: '',
+								password: '',
+								fullname: '',
+								sex: '男',
+								tel: '',
+								email: '',
+								avatar: '../images/avatar/default.jpg'
+							},
+							//记录用户进入编辑状态时的avatar
+							oldAvatar: ''
+						}
+					}
+
+				},
+				//请求数据
+				created: function() {
+					var that = this;
+					$.ajax({
+						type: 'get',
+						url: '/admin/list/',
+						success: function(res) {
+							that.list = res.data;
+						}
+					});
+				},
+				methods: {
+					//上传图片
+					uploadChangeHandler: function(e) {
+						var that = this;
+						var reader = new FileReader();
+						reader.onload = function() {
+							that.edit.model.avatar = this.result;
+						}
+						reader.readAsDataURL(e.target.files[0]);
+						this.file = e.target.files[0];
+					},
+					//进入新增
+					beginAdd: function() {
+						this.edit.type = true;
+						this.edit.isEdit = true;
+						this.edit.model.id = 0;
+						this.edit.model.username = '';
+						this.edit.model.fullname = '';
+						this.edit.model.password = '';
+						this.edit.model.tel = '';
+						this.edit.model.sex = '男';
+						this.edit.model.email = '';
+						this.edit.model.avatar = '../images/avatar/default.jpg';
+					},
+					//进入编辑
+					beginUpdate: function(item) {
+						this.edit.model.id = item.id;
+						this.edit.model.username = item.username;
+						this.edit.model.fullname = item.fullname;
+						this.edit.model.password = item.password;
+						this.edit.model.tel = item.tel;
+						this.edit.model.sex = item.sex;
+						this.edit.model.email = item.email;
+						this.edit.model.avatar = item.avatar;
+						this.edit.oldAvatar = item.avatar;
+						this.edit.type = false;
+						this.edit.isEdit = true;
+					},
+					//退出
+					cancelEdit: function() {
+						this.edit.isEdit = false;
+					},
+					//保存
+					save: function() {
+						if (this.edit.type) {
+							this._saveWithAdd();
+						} else {
+							this._saveWithUpdate();
+						}
+					},
+					_saveWithAdd: function() {
+						var that = this;
+						//发送ajax
+						$.ajax({
+							url: '/admin/register',
+							type: 'post',
+							data: this.edit.model,
+							success: function(res) {
+								if (res.status) {
+									that.edit.model.id = res.data.id;
+									that.list.push(that.edit.model);
+									that.edit.model = {
+										id: 0,
+										username: '',
+										password: '',
+										fullname: '',
+										sex: '男',
+										tel: '',
+										email: '',
+										avatar: '../images/avatar/default.jpg'
+									};
+									that.edit.isEdit = false;
+									alert("新增成功！");
+								} else {
+									alert(res.msg);
+								}
+							}
+
+						})
+					},
+					_saveWithUpdate: function() {
+						var that = this;
+
+						function _update() {
+							$.ajax({
+								url: '/admin/info',
+								type: 'post',
+								data: that.edit.model,
+								success: function(result) {
+									if (result.status) {
+										for (var i = 0; i < that.list.length; i++) {
+											if (that.list[i].id === that.edit.model.id) break;
+										}
+										that.list.splice(i, 1, that.edit.model);
+										that.edit.model = {
+											id: 0,
+											username: '',
+											password: '',
+											fullname: '',
+											sex: '男',
+											tel: '',
+											email: '',
+											avatar: '../images/avatar/default.jpg'
+										};
+										that.edit.isEdit = false;
+										alert("修改成功！");
+									} else {
+										alert(result.msg);
+									}
+								}
+							});
+						};
+						// 情况一:
+						if (this.edit.oldAvatar === this.edit.model.avatar) {
+							_update();
+						}
+						//情况二：用户修改了头像 原默认，新非默认
+						else if (this.edit.oldAvatar === this.edit.defaultAvatar) {
+							//上传到服务器
+							var fd = new FormData();
+							fd.append('file', this.file);
+							fd.append('type', 'avatar');
+							$.ajax({
+								type: 'post',
+								url: '/upload/common/',
+								contentType: false,
+								processData: false,
+								data: fd,
+								success: function(result) {
+									that.edit.model.avatar = ".." + result.data.slice(result.data.indexOf('/images'));
+									_update();
+								}
+							});
+						}
+						//情况三：用户修改了头像 原非默认，新默认
+						else if (this.edit.model.avatar === this.edit.defaultAvatar) {
+							$.ajax({
+								type: 'post',
+								url: '/upload/delete/',
+								data: {
+									src: this.edit.oldAvatar.slice(1)
+								},
+								success: function() {
+									_update();
+								}
+							});
+						}
+						//情况四：用户修改了头像 原非默认，新非默认
+						else {
+							$.ajax({
+								type: 'post',
+								url: '/upload/delete/',
+								data: {
+									src: this.edit.oldAvatar.slice(1)
+								},
+								success: function(result) {
+									var fr = new FormData();
+									fr.append('file', that.file);
+									fr.append('type', 'avatar');
+									$.ajax({
+										type: 'post',
+										url: '/upload/common/',
+										contentType: false,
+										processData: false,
+										data: fr,
+										success: function(result) {
+											that.edit.model.avatar = ".." + result.data.slice(result.data.indexOf('/images'));
+											_update();
+										}
+									});
+								}
+							});
+						}
+					},
+
+				}
+			});
+		</script>
+		<!-- 挂载vue实例 -->
+		<script type="text/javascript">
+			// 创建路由地图
+			//本质根据路由的变化 来根据路由的配置动态渲染指定的组件
+			var router = new VueRouter({
+				routes: [{
+						path: "/article",
+						component: Article
+					},
+					{
+						path: "/admin",
+						component: admin
+					}
+				]
+			});
+			//vue自定义的组件：本质是自定义一个vue能读懂的表亲啊
+			new Vue({
+				el: "#root",
+				router: router,
+				data: {},
+				methods: {}
+
+			});
+		</script>
+	</body>
+</html>

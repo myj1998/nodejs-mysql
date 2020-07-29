@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.box {
+				width: 500px;
+				height: 500px;
+				background-color: pink;
+			}
+
+			/* 进场 3个*/
+			.a-enter {
+				height: 0;
+			}
+
+			.a-enter-active {
+				transition: all 2s;
+			}
+
+			.a-enter-to {}
+
+
+			/* 出场3个 */
+			.a-leave {}
+
+			.a-leave-active {
+				transition: all 2s;
+			}
+
+			.a-leave-to {
+				height: 0;
+			}
+
+			ul {
+				list-style: none;
+			}
+
+			li {
+				height: 50px;
+				line-height: 50px;
+				background-color: pink;
+				overflow: hidden;
+			}
+
+			.b-enter {
+				height: 0;
+			}
+
+			.b-enter-active {
+				transition: all 2s;
+			}
+
+			.b-enter-to {}
+
+
+			/* 出场3个 */
+			.b-leave {}
+
+			.b-leave-active {
+				transition: all 2s;
+			}
+
+			.b-leave-to {
+				height: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<button @click="isShow = !isShow">切换</button>
+			<transition name="a">
+				<div class="box" v-show="isShow"></div>
+			</transition>
+
+			<button @click="names.push({id:4,name:'赵顺'})">加一项</button>
+			<transition-group name="b" tag="ul">
+				<li v-for="(item,i) in names" :key='item.id'></li>
+			</transition-group>
+		</div>
+
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#root',
+				data: {
+					isShow: false,
+					names: [{
+							id: 1,
+							name: '张三'
+						},
+						{
+							id: 2,
+							name: '李四'
+						},
+						{
+							id: 3,
+							name: '王五'
+						},
+					]
+				}
+			})
+		</script>
+	</body>
+</html>

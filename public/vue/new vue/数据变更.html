@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<ul>
+				<li v-for="(item,index) in scores" :key='index'>
+					{{index + 1}} -- {{item}} 分
+					<button @click="handAdd(index)" type="button">加一</button>
+					<button @click="handleRemove(index)" type="button">删除</button>
+				</li>
+			</ul>
+			<button @click="handleSort" type="button">排序</button>
+			<button @click="handleFilter" type="button">筛选</button>
+		</div>
+	</body>
+
+	<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var app = new Vue({
+			el: '#app',
+			data: {
+				scores: [65, 78, 96, 54, 85],
+			},
+			methods: {
+				//加一
+				handAdd: function(i) {
+					// console.log(this.scores[i])
+					this.$set(this.scores, i, this.scores[i] + 1)
+				},
+
+				//删除
+				handleRemove: function(i) {
+					this.scores.splice(i, 1)
+				},
+
+				// 排序
+				handleSort: function() {
+					this.scores.sort(function(a, b) {
+						return a - b;
+					});
+				},
+
+				// 筛选
+				handleFilter: function() {
+					// item: 数组里面单个的元素
+					this.scores = this.scores.filter(function(item) {
+						return item >= 80;
+					});
+				}
+			}
+		});
+	</script>
+</html>

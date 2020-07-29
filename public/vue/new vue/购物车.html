@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<table width="100%" border="1" cellspacing="0" cellpadding="20">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>作者</th>
+						<th>书名</th>
+						<th>数量</th>
+						<th>价格</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="text-align: center;" v-for="(item,index) in books" :key='index'>
+						<td>{{item.id}}</td>
+						<td>{{item.author}}</td>
+						<td>{{item.name}}</td>
+						<td>
+							<button :disabled="item.num == 1" @click="handleDecrease(item)" type="button">-</button>
+							{{item.num}}
+							<button @click="handleIncrease(item)" type="button">+</button>
+						</td>
+						<td>{{item.price}}</td>
+						<td><button @click="books.splice(index,1)" type="button">删除</button></td>
+					</tr>
+				</tbody>
+			</table>
+			<p>总金额为{{account}}</p>
+			<p>总数量为{{total}}</p>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					books: [{
+						id: 1,
+						author: '曹雪芹',
+						name: '红楼梦',
+						num: 1,
+						price: 32.0
+					}, {
+						id: 2,
+						author: '施耐庵',
+						name: '水浒传',
+						num: 1,
+						price: 30.0
+					}, {
+						id: 3,
+						author: '罗贯中',
+						name: '三国演义',
+						num: 1,
+						price: 24.0
+					}, {
+						id: 4,
+						author: '吴承恩',
+						name: '西游记',
+						num: 1,
+						price: 20.0
+					}]
+				},
+				methods: {
+
+					//加
+					handleIncrease: function(book) {
+						book.num += 1;
+					},
+
+					//减
+					handleDecrease: function(book) {
+						book.num -= 1;
+					}
+				},
+				computed: {
+					account: function() {
+						var sum = 0;
+						this.books.forEach(function(item, index) {
+							sum += item.num * item.price;
+						});
+						return sum;
+					},
+					// 还可以用reduce方法
+					// account() {
+					// 	return this.books.reduce(function(total, item, index) {
+					// 		return total + item.num * item.price;
+					// 	}, 0)
+					// },
+					total: function() {
+						var sum = 0;
+						this.books.forEach(function(item, index) {
+							sum += item.num;
+						});
+						return sum;
+					},
+					// 还可以用reduce方法
+					// total() {
+					// 	var sum = this.books.reduce(function(total, item, index) {
+					// 		return total + item.num
+					// 	}, 0)
+					// 	return sum;
+					// }
+				}
+			});
+		</script>
+	</body>
+</html>

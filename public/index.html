@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<link rel="stylesheet" type="text/css" href="assest/css/rest.css" />
+		<link rel="stylesheet" type="text/css" href="cms-app/index.css" />
+		<link rel="stylesheet" type="text/css" href="cms-menu/index.css" />
+		<link rel="stylesheet" type="text/css" href="cms-article/index.css" />
+		<link rel="stylesheet" type="text/css" href="cms-admin/index.css" />
+		<link rel="stylesheet" type="text/css" href="assest/css/afternoon.css"/>
+		<link rel="stylesheet" type="text/css" href="assest/css/category.css"/>
+		<link rel="stylesheet" type="text/css" href="cms-tag/index.css"/>
+		<title></title>
+	</head>
+	<body>
+		<div id="root">
+			<cms-app />
+		</div>
+
+		<!-- 引入jquery -->
+		<script src="assest/js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入vue -->
+		<script src="assest/js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入 -->
+		<script src="assest/js/vue-router.js" type="text/javascript" charset="utf-8"></script>
+		<!--引入cms-admin--组件 -->
+		<script src="cms-admin/index.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入cms-article组件 -->
+		<script src="cms-article/index.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="cms-tag/index.js" type="text/javascript" charset="utf-8"></script>
+		
+		<script src="cms-category/index.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入cms-menu组件 -->
+		<script src="cms-menu/index.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入根组件cms-app -->
+		<script src="cms-app/index.js" type="text/javascript" charset="utf-8"></script>
+		<!-- 引入router路由配置 -->
+		<script src="router/index.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//创建vue应用程序的根实例对象
+			new Vue({
+				el: "#root",
+				router: router
+			});
+		</script>
+	</body>
+</html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title></title>
+	</head>
+	<body>
+		<form action="" method="post">
+			<p>
+				<label>账户：</label>
+				<input type="text" name="username" placeholder="请输入账户名称" />
+			</p>
+			<p>
+				<label>密码：</label>
+				<input type="password" name="password" placeholder="请输入密码" />
+			</p>
+			<button id="btn" type="button">登 录</button>
+		</form>
+
+		<script type="text/javascript">
+			// 获取元素
+			var oBtn = document.getElementById("btn");
+			var oUsername = document.querySelector("input[name=username]")
+			var oPassword = document.querySelector("input[name=password]")
+
+			// 绑定click事件
+			oBtn.onclick = function() {
+				//获取value值
+				var username = oUsername.value;
+				var password = oPassword.value;
+
+				// 原生javascript的AJAX实现
+				// 创建XMLHttpRequest对象
+				var ajax = new XMLHttpRequest();
+				//post请求的发法(下面三行)
+				ajax.open('POST', '/admin/login', true);
+				ajax.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+				// 以QueryString的方式: username=admin&password=123
+				//发送请求
+				ajax.send(`username=${username}&password=${password}`);
+
+				// 监听响应回调函数
+				// 每当readyState属性改变时就会调用onreadystatechange函数
+				ajax.onreadystatechange = function() {
+					if (ajax.readyState == 4) {
+						// 将字符串转化为对象
+						var res = JSON.parse(ajax.responseText);
+						if (res.status) {
+							//登陆成功
+							alert(res.msg);
+						} else {
+							// 登陆失败
+							alert(res.msg);
+						}
+					}
+				}
+			}
+		</script>
+	</body>
+</html>

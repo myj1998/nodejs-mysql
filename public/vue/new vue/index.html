@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<form action="">
+				<p>
+					<label>姓名</label>
+					<input v-model="form.name" type="text" placeholder="请输入姓名" />
+				</p>
+				<p>
+					<label>成绩</label>
+					<input v-model="form.score" type="number" placeholder="请输入成绩" />
+				</p>
+				<p>
+					<button @click="handleInsert" type="button">录入成绩</button>
+				</p>
+			</form>
+			<!-- 表格 -->
+			<table width="100%" border="1" cellspacing="0" cellpadding="20">
+				<thead>
+					<tr>
+						<th>#</th>
+						<th>姓名</th>
+						<th>成绩</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="text-align: center;" v-for="(item,index) in students">
+						<td>{{index+1}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.score}}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					form: {
+						name: "",
+						score: "",
+					},
+					students: [{
+							name: "黄小米",
+							score: 100
+						},
+						{
+							name: "黄渤",
+							score: 80
+						},
+					]
+				},
+				methods: {
+					handleInsert: function() {
+						// object作为引用数据类型，导致插入的数据与表单关联
+						// 使用扩展运算符，浅拷贝form对象
+						this.students.push({ ...this.form});
+					}
+				}
+			});
+			
+			// 扩展运算符(...)打开一个对象重新放置在另一个对象
+			// var objA = {a:1,b:2};
+			// var objB = {c:3};
+			// var objC = {...objA,...objB}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			#app {
+				width: 60%;
+				margin: 0 auto;
+			}
+
+			.hover:hover {
+				background-color: #ccc;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<form action="">
+				<p>
+					<label>添加:</label>
+					<input style="height: 30px; width: 200px; border: 1px solid #ccc; border-radius: 5px;" v-model="form.name" type="text"
+					 placeholder="姓名" />
+					<input style="height: 30px; width: 200px; border: 1px solid #ccc; border-radius: 5px;" v-model="form.age" type="number"
+					 placeholder="年龄" />
+					<button style="background-color: #5BC0DE; width: 60px; height: 30px; border: 0;
+					 border-radius: 5px;" @click="handleInsert"
+					 type="button">添加</button>
+					<label>变色:</label>
+					<button style="background-color: #5BC0DE; height: 30px; border: 0; border-radius: 5px;" type="button" @click="isColor = !isColor">{{isColor?'关闭移入变色':'开启移入变色'}}</button>
+				</p>
+			</form>
+			<!-- 表格 -->
+			<table width="100%" border="1" cellspacing="0" cellpadding="10">
+				<thead>
+					<tr>
+						<th>ID</th>
+						<th>姓名</th>
+						<th>年龄</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr style="text-align: center;" v-for="(item,index) in students" :key='index' :class="{'hover':isColor}">
+						<td>{{index+1}}</td>
+						<td>{{item.name}}</td>
+						<td>{{item.age}}</td>
+						<td><button @click="students.splice(index,1);" type="button">删除</button></td>
+					</tr>
+				</tbody>
+			</table>
+			<p>
+				<label>搜索:</label>
+				<input style="height: 30px; width: 200px; border: 1px solid #ccc; border-radius: 5px;" type="text" placeholder="姓名" />
+				<button style="background-color: #5BC0DE; width: 60px; height: 30px; border: 0;
+				 border-radius: 5px;" type="button"
+				 @click="handleHunt">搜索</button>
+				<label>排序:</label>
+				<button @click="handleSort" style="background-color: #5BC0DE; height: 30px; border: 0;
+				 border-radius: 5px;"
+				 type="button">年龄{{isASC?'从小到大':'从大到小'}}排序</button>
+			</p>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					form: {
+						name: "",
+						age: "",
+						hinglight: false,
+						checked: false,
+					},
+					
+					//排序
+					isASC: true,
+					//变色
+					isColor: false,
+					students: [{
+							name: "张三",
+							age: 35
+						},
+						{
+							name: "李四",
+							age: 42
+						},
+						{
+							name: "王五",
+							age: 26
+						},
+						{
+							name: "赵六",
+							age: 30
+						},
+						{
+							name: "王四",
+							age: 38
+						},
+						{
+							name: "Danny",
+							age: 32
+						}
+					]
+				},
+				methods: {
+					handleInsert: function() {
+						if (this.form.name !== "" && this.form.age !== "") {
+							this.students.push({ ...this.form
+							});
+						} else {
+							alert("请输入姓名年龄")
+						}
+					},
+					handleSort: function() {
+						if (this.isASC) {
+							this.students.sort(function(a, b) {
+								return a.age - b.age;
+							});
+						} else {
+							this.students.sort(function(a, b) {
+								return b.age - a.age;
+							});
+						}
+						this.isASC = !this.isASC;
+					},
+					handleHunt: function() {
+
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

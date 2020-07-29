@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<h3>
+				昵称: 黄小米
+			</h3>
+			<h3>
+				会员: <span v-if="isVip">钻石会员</span>
+				<button @click="isVip=true" type="button">成为会员</button>
+			</h3>
+			<h3>
+				手机: <span v-show="isShow">13012540120</span>
+				<button @click="isShow=!isShow" type="button">{{isShow ? '隐藏' : '显示'}}</button>
+			</h3>
+			<h3>
+				简介:
+				<p v-html="info"></p>
+			</h3>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					isVip: false,
+					isShow: false,
+					info: '<span style="color:pink">猫控</span><span style="color:pink">旅游达人</span><span style="color:pink">电影</span>'
+				}
+			});
+
+		</script>
+	</body>
+</html>

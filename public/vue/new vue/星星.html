@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			#app {
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+
+			}
+
+			.box div {
+				width: 23px;
+				height: 23px;
+				overflow: hidden;
+			}
+
+			/*  click*/
+			.box .start img {
+				position: relative;
+				bottom: 25px;
+			}
+
+			/* hoverclass */
+			.box .hover img {
+				position: relative;
+				bottom: 25px;
+			}
+
+			.box {
+				border: 1px solid black;
+				width: 400px;
+				height: 200px;
+				display: flex;
+				flex-direction: row;
+				justify-content: center;
+				align-items: center;
+				position: relative
+			}
+
+			.box span {
+				position: absolute;
+				top: 150px;
+				left: 200px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="box">
+				<div v-for="(item,index) in stars" :class="{start:item.isStart,'hover':item.isHover}" @mouseenter="moveHandel(index)"
+				 @mouseleave="leaveHander(index)">
+					<img src="../img/123.png" @click="clickHandler(index)"></div>
+				<span>评价：{{Evaluation}}</span>
+			</div>
+		</div>
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: "#app",
+				data: {
+					stars: [{
+						isStart: false,
+						text: "糟糕透了！！！",
+						isHover: false
+					}, {
+						isStart: false,
+						text: "不怎么样！！",
+						isHover: false
+					}, {
+						isStart: false,
+						text: "一般般吧！",
+						isHover: false
+					}, {
+						isStart: false,
+						text: "还不错哦。",
+						isHover: false
+					}, {
+						isStart: false,
+						text: "强烈推荐",
+						isHover: false
+					}],
+					Evaluation: "暂无评价",
+					//重置定时器
+					temp: ""
+
+				},
+				methods: {
+					//点击
+					clickHandler: function(i) {
+						this.Evaluation = this.stars[i].text;
+						this.temp = this.Evaluation;
+						this.stars.forEach(function(item, index) {
+							if (index <= i) {
+								item.isStart = true;
+							} else {
+								item.isStart = false;
+							}
+						});
+					},
+					//移入显示
+					moveHandel: function(i) {
+						this.Evaluation = this.stars[i].text;
+						this.stars.forEach(function(item, index) {
+							if (index <= i) {
+								item.isHover = true;
+							} else {
+								item.isHover = false;
+							}
+						});
+					},
+					//移除
+					leaveHander: function(i) {
+						this.Evaluation = this.temp;
+						this.stars.forEach(function(item, index) {
+							item.isHover = false;
+						});
+					}
+
+				}
+			});
+		</script>
+	</body>
+</html>

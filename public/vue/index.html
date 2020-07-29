@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="root">
+			<span v-show="score >= 60">及格</span>
+			<span v-show="score < 60">不及格</span>
+		</div>
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: "#root",
+				data: {
+					score: 70
+				}
+			});
+		</script>
+	</body>
+</html>

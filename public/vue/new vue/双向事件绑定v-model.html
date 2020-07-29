@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+
+	<body>
+		<div id="app">
+			<fieldset>
+				<legend>基本双向数据绑定</legend>
+				<input type="text" v-model.number="count">
+			</fieldset>
+
+			<fieldset>
+				<legend>v-model语法糖</legend>
+				<input type="text" :value="count" @input="count=$event.target.value">
+			</fieldset>
+
+			<fieldset>
+				<legend>表单双向数据绑定</legend>
+				<form action="">
+					<p>
+						<label>账户：</label>
+						<input type="text" v-model.trim="username">
+					</p>
+					<p>
+						<label>密码：</label>
+						<input type="password" v-model.trim="password">
+					</p>
+					<p>
+						<label>性别：</label>
+						<label><input v-model='sex' value="1" name="sex" type="radio"> 男</label>
+						<label><input v-model='sex' value="0" name="sex" type="radio"> 女</label>
+					</p>
+					<p>
+						<label>爱好：</label>
+						<label><input v-model='favor' value="film" type="checkbox"> 电影</label>
+						<label><input v-model='favor' value="song" type="checkbox"> 唱歌</label>
+						<label><input v-model='favor' value="camera" type="checkbox"> 摄影</label>
+					</p>
+					<p>
+						<label>学历：</label>
+						<select v-model='degree'>
+							<option>高中</option>
+							<option>专科</option>
+							<option>本科</option>
+							<option>研究生</option>
+							<option>博士</option>
+						</select>
+					</p>
+				</form>
+			</fieldset>
+
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			let app = new Vue({
+				el: '#app',
+				data: {
+					count: 100,
+					username: '',
+					password: '',
+					sex: '',
+					favor: [],
+					degree: ''
+				},
+			});
+		</script>
+	</body>
+
+</html>

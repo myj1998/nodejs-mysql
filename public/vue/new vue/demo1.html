@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" type="text/css" href="../../admin/lib/bootstrap/css/bootstrap.min.css" />
+
+		<style type="text/css">
+			.panel-heading {
+				background-color: rgba(0, 0, 0, 0.8) !important;
+			}
+
+			.form-horizontal {
+				padding-right: 100px;
+			}
+
+			#btn {
+				margin-left: -75px;
+			}
+
+			.hunt {
+				background-color: #ccc;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<div class="container">
+				<div class="panel panel-primary">
+					<div class="panel-heading">录入成绩</div>
+					<div class="panel-body">
+						<!-- 表单 -->
+						<form class="form-horizontal">
+							<div class="form-group">
+								<label for="inputEmail" class="col-sm-2 control-label">姓名：</label>
+								<div class="col-sm-10">
+									<input v-model.trim="form.name" class="form-control" placeholder="请输入学生姓名">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">班级：</label>
+								<div class="col-sm-10">
+									<select name="province" id="inputClasses" v-model.trim="form.classes" class="form-control">
+										<option value="三年1班">三年1班</option>
+										<option value="三年2班">三年2班</option>
+										<option value="三年3班">三年3班</option>
+										<option value="三年4班">三年4班</option>
+										<option value="三年5班">三年5班</option>
+									</select>
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword" class="col-sm-2 control-label">数学：</label>
+								<div class="col-sm-10">
+									<input v-model.trim="form.math" class="form-control" placeholder="请输入成绩">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword" class="col-sm-2 control-label">语文：</label>
+								<div class="col-sm-10">
+									<input v-model.trim="form.language" class="form-control" placeholder="请输入成绩">
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="inputPassword" class="col-sm-2 control-label">英语：</label>
+								<div class="col-sm-10">
+									<input v-model.trim="form.english" class="form-control" placeholder="请输入成绩">
+								</div>
+							</div>
+							<div class="form-group">
+								<div class="col-sm-offset-2 col-sm-10">
+									<button @click="handleInsert" type="button" id="btn" class="btn btn-default btn-info">录入</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="panel panel-primary">
+					<div class="panel-heading">筛选搜索</div>
+					<div class="panel-body">
+						<!-- 表单 -->
+						<form method="POST" class="form-horizontal">
+							<div class="form-group">
+								<label for="" class="col-sm-2 control-label">搜索：</label>
+								<div class="col-sm-5">
+									<select v-model="search.classes" name="province" class="form-control class">
+										<option value="三年1班">三年1班</option>
+										<option value="三年2班">三年2班</option>
+										<option value="三年3班">三年3班</option>
+										<option value="三年4班">三年4班</option>
+										<option value="三年5班">三年5班</option>
+									</select>
+								</div>
+								<div class="col-sm-5">
+									<div class="input-group">
+										<input v-model="search.name" type="text" class="form-control name" placeholder="请输入学生姓名">
+										<span class="input-group-btn">
+											<button @click="searchHandle" id="btn1" class="btn btn-default btn-info" type="button">搜索</button>
+										</span>
+									</div>
+								</div>
+							</div>
+							<div class="row">
+								<label for="" class="col-sm-2 control-label">搜索：</label>
+								<div class="col-sm-5" style="font-size: 0;">
+									<select v-model="search.curriculum" id="achievement" style="width: 80px; display: inline-block;" name="province"
+									 class="form-control class">
+										<option value="数学">数学</option>
+										<option value="语文">语文</option>
+										<option value="英语">英语</option>
+									</select>
+									<input v-model="search.min" style="width: calc(100% - 100px); display: inline-block;" type="text" id="min"
+									 class="form-control" placeholder="分数最小值">
+								</div>
+
+								<div class="col-sm-1">
+									——
+								</div>
+								<div class="col-sm-4">
+									<div class="input-group">
+										<input v-model="search.max" type="text" id="max" class="form-control" placeholder="分数最大值">
+										<span class="input-group-btn">
+											<button @click="searchSift" id="btn2" class="btn btn-default btn-info" type="button">筛选</button>
+										</span>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<div class="panel panel-primary">
+					<table class="table table-bordered">
+						<thead style="background-color: rgba(0,0,0,0.8)">
+							<tr style="color: white;">
+								<th>#</th>
+								<th>班级</th>
+								<th>姓名</th>
+								<th @click="mathSort">数学</th>
+								<th @click="languageSort">语文</th>
+								<th @click="englishSort">英语</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="(item,index) in students" :key='index' :class="{'hunt':item.isShow}">
+								<td>{{index+1}}</td>
+								<td>{{item.classes}}</td>
+								<td>{{item.name}}</td>
+								<td>{{item.math}}</td>
+								<td>{{item.language}}</td>
+								<td>{{item.english}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		<script src="../../js/jquery-3.5.1.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../admin/lib/bootstrap/js/bootstrap.min.js" type="text/javascript" charset="utf-8"></script>
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					form: {
+						classes: "",
+						name: "",
+						math: "",
+						language: "",
+						english: ""
+					},
+
+					//排序
+					isMath: true,
+					isLanguage: true,
+					isEnglish: true,
+
+					//变色
+					isShow: false,
+					search: {
+						classes: "",
+						name: "",
+						min: "",
+						max: "",
+						curriculum: ""
+					},
+
+					students: [{
+							classes: "三年1班",
+							name: "哪吒",
+							math: 99,
+							language: 98,
+							english: 97,
+							isShow: false,
+						},
+						{
+							classes: "三年2班",
+							name: "金吒",
+							math: 85,
+							language: 94,
+							english: 99,
+							isShow: false,
+						},
+						{
+							classes: "三年1班",
+							name: "木吒",
+							math: 90,
+							language: 95,
+							english: 91,
+							isShow: false,
+						}
+					]
+				},
+				methods: {
+					handleInsert: function() {
+						this.students.push({ ...this.form
+						});
+						alert("录入成功")
+					},
+
+					// 排序数学
+					mathSort: function() {
+						if (this.isMath) {
+							this.students.sort(function(a, b) {
+								return a.math - b.math;
+							});
+						} else {
+							this.students.sort(function(a, b) {
+								return b.math - a.math;
+							});
+						}
+						this.isMath = !this.isMath;
+					},
+					// 排序语文
+					languageSort: function() {
+						if (this.isLanguage) {
+							this.students.sort(function(a, b) {
+								return a.language - b.language;
+							});
+						} else {
+							this.students.sort(function(a, b) {
+								return b.language - a.language;
+							});
+						}
+						this.isLanguage = !this.isLanguage;
+					},
+					// 排序英语
+					englishSort: function() {
+						if (this.isEnglish) {
+							this.students.sort(function(a, b) {
+								return a.english - b.english;
+							});
+						} else {
+							this.students.sort(function(a, b) {
+								return b.english - a.english;
+							});
+						}
+						this.isEnglish = !this.isEnglish;
+					},
+					// 搜索
+					searchHandle: function() {
+						var that = this;
+						this.students.forEach(function(item, index) {
+							if (item.classes == that.search.classes && item.name == that.search.name) {
+								item.isShow = true;
+							} else {
+								item.isShow = false;
+							}
+						});
+					},
+					// 筛选
+					searchSift: function() {
+						var that = this;
+						this.students.forEach(function(item, index) {
+							if (that.search.curriculum == "数学") {
+								item.isShow = false;
+								if (item.math > that.search.min && item.math < that.search.max) {
+									item.isShow = true;
+								} else {
+									item.isShow = false;
+								}
+							} else if (that.search.curriculum == "语文") {
+								item.isShow = false;
+								if (item.language > that.search.min && item.language < that.search.max) {
+									item.isShow = true;
+								} else {
+									item.isShow = false;
+								}
+							} else if (that.search.curriculum == "英语") {
+								item.isShow = false;
+								if (item.english > that.search.min && item.english < that.search.max) {
+									item.isShow = true;
+								} else {
+									item.isShow = false;
+								}
+							}
+						});
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

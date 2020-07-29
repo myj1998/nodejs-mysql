@@ -1,0 +1,172 @@
+.content {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.ellispid-gt4 {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3;
+	overflow: hidden;
+}
+
+.content th,
+.content td {
+	padding: 10px 15px;
+	border: 1px solid #00B7FF;
+	border-collapse: collapse;
+}
+
+.content tr td:nth-child(1) {
+	width: 70px;
+}
+
+.content tr td:nth-child(2) {}
+
+.content tr td:nth-child(2)>img {
+	width: 100px;
+	height: 100px;
+	border-radius: 5px;
+	box-shadow: 0 0 4px 2px #E0E0E0;
+}
+
+.content tr td:nth-child(3) {
+	width: 70px;
+	text-align: center;
+}
+
+.content tr td:nth-child(4) {
+	width: 100px;
+}
+
+.content tr td:nth-child(5) {
+	width: 100px;
+}
+
+.content tr td:nth-child(6) {}
+
+.content tr td:nth-child(7)>a {
+	padding: 1px;
+}
+
+.content tr td:nth-child(7) {
+	width: 70px;
+	text-align: center;
+}
+
+.aaa-entert {
+	opacity: 0;
+}
+
+.edit-content tr td {
+	width: 20px !important;
+}
+
+.aaa-enter-active {
+	transition: all 1s;
+}
+
+.aaa-enter-to {}
+
+.aaa-leave {}
+
+.aaa-leave-active {
+	transition: all 1s;
+}
+
+.aaa-leave-to {
+	opacity: 0;
+}
+
+/* edit 弹层样式 */
+.edit {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+.edit-content {
+	position: absolute;
+	left: 20%;
+	top: 40%;
+	background-color: white;
+}
+
+.edit-enter {
+	transform: scale(0);
+}
+
+.edit-enter-active {
+	transition: all 1s;
+}
+
+.edit-enter-to {
+	transform: scale(1);
+}
+
+.edit-leave {
+	transform: scale(1);
+}
+
+.edit-leave-active {
+	transition: all 1s;
+}
+
+.edit-leave-to {
+	transform: scale(0);
+}
+
+.edit-content table {
+	border-collapse: collapse;
+}
+
+.edit-content table td th {}
+
+.edit-content td input,
+.edit-content td select {
+	border: 0px;
+}
+
+.edit-content button {
+	width: 100%;
+	height: 100%;
+	border: 0px;
+	color: white;
+	background-color: orange;
+}
+
+.edit-content tr:nth-child(3) {
+	display: flex;
+	flex-direction: row;
+}
+
+.edit-content img {
+	width: 70px;
+	height: 70px;
+}
+
+.edit-content .preview {
+	width: 70px;
+	height: 70px;
+}
+
+.edit-content .addimg input {
+	font-size: 0px;
+	width: 100%;
+	height: 100%;
+	background-color: orange;
+}
+
+.edit-content .addimg {
+	width: 50px;
+	height: 100px;
+	overflow: hidden;
+}
+.cms-admin table{
+	border-collapse: collapse;
+	width: 100%;
+	text-align: center;
+}

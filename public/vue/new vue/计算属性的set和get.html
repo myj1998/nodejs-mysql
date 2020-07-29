@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="app">
+			<fieldset id="">
+				<legend>计算属性的set/get</legend>
+				<p>
+					firstName: {{firstName}}
+				</p>
+				<p>
+					lastName: {{lastName}}
+				</p>
+				<p>
+					fullName: <input type="text" v-model="fullName" />
+				</p>
+			</fieldset>
+
+			<fieldset>
+				<legend>全选功能</legend>
+				<table width="100%" border="1" cellspacing="4" cellpadding="10">
+					<thead>
+						<tr>
+							<th>
+								<input type="checkbox" v-model="checkedAll" />
+							</th>
+							<th>姓名</th>
+							<th>年龄</th>
+						</tr>
+					</thead>
+					<tbody style="text-align: center;" v-for="(item,index) in students" :key='index'>
+						<tr>
+							<td><input type="checkbox" v-model="item.checked" /></td>
+							<td>{{item.name}}</td>
+							<td>{{item.age}}</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</fieldset>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var app = new Vue({
+				el: '#app',
+				data: {
+					firstName: 'Tom',
+					lastName: 'Smith',
+					students: [{
+							name: "黄小米",
+							age: 25,
+							checked: false
+						},
+						{
+							name: "黄磊",
+							age: 35,
+							checked: false
+						},
+						{
+							name: "黄渤",
+							age: 40,
+							checked: false
+						}
+					]
+				},
+				computed: {
+					checkedAll: {
+						set: function(newValue) {
+							this.students.forEach(function(item) {
+								item.checked = newValue;
+							})
+						},
+						get: function() {
+							var num = 0;
+							this.students.forEach(function(item, index) {
+								if (item.checked) {
+									num++;
+								}
+							});
+							return num == this.students.length;
+						}
+					},
+
+
+
+					fullName: {
+						get: function() {
+							return this.firstName + " " + this.lastName;
+						},
+						set: function(newValue) {
+							var arr = newValue.split(' '); //split(' ')把字符串按空格分割成字符串数组
+							this.firstName = arr[0];
+							this.lastName = arr[arr.length - 1];
+						}
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

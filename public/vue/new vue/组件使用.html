@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			.counter {
+				display: flex;
+				align-items: center;
+				width: 200px;
+			}
+
+			.counter .increase,
+			.counter .decrease {
+				padding: 6px 20px;
+				border: 1px solid #999;
+				border-radius: 3px;
+				font-size: 18px;
+			}
+
+			.counter .decrease {
+				border-top-right-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+
+			.counter .increase {
+				border-top-left-radius: 0px;
+				border-bottom-left-radius: 0px;
+			}
+
+			.counter .number {
+				padding: 6px;
+				text-align: center;
+				min-width: 100px;
+				border-top: 1px solid #999;
+				border-bottom: 1px solid #999;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<counter :value="value" @add="add($event)" @cut="cut" :min='1' :max='10'></counter>
+		</div>
+
+		<template id="btn">
+			<div class="counter">
+				<!-- <button class="decrease" type="button" @click="cutvalue" :disabled="value==min">-</button> -->
+				<button class="decrease" type="button" @click="cutvalue">-</button>
+				<span class="number">{{value}}</span>
+				<!-- <button class="increase" type="button" @click="addvalue" :disabled="value==max">+</button> -->
+				<button class="increase" type="button" @click="addvalue">+</button>
+			</div>
+		</template>
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			Vue.component('counter', {
+				template: "#btn",
+				props: ['value', 'min', 'max'],
+				methods: {
+					addvalue: function() {
+						var a = parseInt(prompt());
+						if (this.value >= this.max) {
+							alert("!!!");
+							return;
+						}
+						this.$emit('add', a);
+					},
+					cutvalue: function() {
+						if (this.value <= this.min) {
+							alert("!!!");
+							return;
+						}
+						this.$emit('cut');
+					}
+				},
+
+			});
+			var app = new Vue({
+				el: "#app",
+				data: {
+					value: 1,
+					min: 1,
+					max: 10
+				},
+				methods: {
+					add: function(a) {
+						this.value += a;
+					},
+					cut: function() {
+						this.value--;
+					},
+
+				}
+			});
+		</script>
+	</body>
+</html>

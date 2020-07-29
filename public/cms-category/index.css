@@ -1,0 +1,8 @@
+.cms-category table {
+	border-collapse: collapse;
+}
+
+.cms-category table th,
+.cms-category table td {
+	border: 1px solid #00B7FF;
+}

@@ -1,0 +1,52 @@
+<div class="cms-category">
+	<table border="" cellspacing="" cellpadding="">
+		<caption>
+			<h1>分类列表</h1>
+			<a href="javascript:void(0)" @click="addEnter">增加</a>
+		</caption>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>一级分类</th>
+				<th>二级分类</th>
+				<th>编辑</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="item in list" :key="item.id">
+				<td v-text="item.id"></td>
+				<td v-text="item.name"></td>
+				<td v-text="item.parent_name"></td>
+				<td> <a href="javascrpt:void(0)" @click="remove(item.id)">删除</a>
+					<a href="javascrpt:void(0)" @click="editEnter(item.id)">修改</a></td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="edit_box" v-show="edit.isShow">
+		<div class="eidt-content">
+			<table border="">
+				<thead>
+					<tr>
+						<th>分类名称</th>
+						<th>父级分类</th>
+						<th><a href="javascrpt:void(0)" @click="cancel">取消</a></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<input type="text" v-model="edit.model.name" />
+						</td>
+						<td>
+							<select name="" v-model="edit.model.parent_id">
+								<option :value="0">-请选择-</option>
+								<option v-for="item in category1st" :value="item.id" v-text="item.name"></option>
+							</select>
+						</td>
+						<td><a href="javascrpt:void(0)" @click="save">保存</a></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<style type="text/css">
+			caption {
+				color: red;
+			}
+
+			caption span {
+				font-size: 50px;
+			}
+
+			table {
+				width: 600px;
+				height: 250px;
+				margin: 0 auto;
+				background-color: antiquewhite;
+			}
+
+			td {
+				text-align: center;
+			}
+
+			.edit-modal {
+				position: fixed;
+				top: 0;
+				left: 0;
+				width: 100%;
+				height: 100%;
+				background-color: rgba(0, 0, 0, 0.4);
+			}
+
+			.edit-content {
+				position: absolute;
+				left: 50%;
+				top: 50%;
+				transform: translate(-50%, -50%);
+				margin: auto;
+				padding: 50px 100px;
+				background-color: white;
+			}
+
+			input {
+				border: none;
+				outline: none;
+				border-bottom: 1px solid #ccc;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<table border="1px" cellspacing="0" cellpadding="0">
+				<caption>
+					<h1>个人信息</h1>
+					<a href="#" @click="isEdit = true" state=true;>新增</a>
+				</caption>
+				<thead>
+					<tr>
+						<th>姓名</th>
+						<th>年龄</th>
+						<th>爱好</th>
+						<th>手机</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				<tbody @click="removeHandler">
+					<tr v-for="item in message" :key='item.id'>
+						<td v-text="item.name"></td>
+						<td v-text="item.age"></td>
+						<td v-text="item.like"></td>
+						<td v-text="item.handset"></td>
+						<td>
+							<a href="#" :data-id='item.id'>删除</a>
+							<a href="#" :data-id='item.id' @click="isEdit = true">编辑</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="edit-modal" v-show="isEdit">
+				<div class="edit-content">
+					<label for="name">姓名</label>
+					<input type="text" id='name' v-model="model.name"><br>
+
+					<label for="age">年龄</label>
+					<input type="text" id='age' v-model="model.age"><br>
+
+					<label for="like">爱好</label>
+					<input type="text" id='like' v-model="model.like"><br>
+
+					<label for="handset">手机</label>
+					<input type="text" id='handset' v-model="model.handset"><br>
+
+					<input type="button" value="保存" @click="save" />
+					<input type="button" value="取消" @click="cancelEdit" />
+				</div>
+			</div>
+		</div>
+
+		<script src="vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#root',
+				data: {
+					message: [{
+							id: 1,
+							name: '张三',
+							age: 25,
+							like: '篮球',
+							handset: 13012540120
+						},
+						{
+							id: 2,
+							name: '李四',
+							age: 18,
+							like: '羽毛球',
+							handset: 12547855662
+						},
+						{
+							id: 3,
+							name: '王五',
+							age: 36,
+							like: '足球',
+							handset: 17833155662
+						},
+						{
+							id: 4,
+							name: '黄小米',
+							age: 27,
+							like: '跑步',
+							handset: 15545662212
+						},
+						{
+							id: 5,
+							name: '赵薇',
+							age: 31,
+							like: '乒乓球',
+							handset: 13155462226
+						}
+					],
+					isEdit: false,     //是否进入编辑状态
+					model: {
+						id: 0,
+						name: '',
+						age: '',
+						like: '',
+						handset: ''
+					},
+					
+					state: true     //是新增还是修改
+				},
+				methods: {
+					removeHandler: function(e) {
+						//判断是不是从a标签中冒泡出来的
+						if (e.target.tagName !== 'A') return;
+						if (e.target.innerText == '删除') {
+							// 询问客户是否删除确认不删的话返回
+							if (!confirm('确定？')) return;
+							//从a中拿出藏的id并转化为整形
+							var id = parseInt(e.target.dataset.id);
+							//找出要删除的元素在数组中的下标位置
+							for (var i = 0; i < this.message.length; i++) {
+								if (this.message[i].id === id) break;
+							}
+							// 从数组中删除元素
+							this.message.splice(i, 1);
+							// 提示删除成功
+							alert('删除成功');
+						} else {
+							var id = parseInt(e.target.dataset.id);
+							for (var i = 0; i < this.message.length; i++) {
+								if (this.message[i].id === id) break;
+							}
+							
+							// 将点击对象的内容搬到input							
+							this.state = false;
+							
+							this.index = i;
+							this.model.name = this.message[i].name;
+							this.model.age = this.message[i].age;
+							this.model.like = this.message[i].like;
+							this.model.handset = this.message[i].handset;
+						}
+
+					},
+					cancelEdit: function() {
+						//
+						//重置表单
+						this.model.id = 0;
+						this.model.name = '';
+						this.model.age = '';
+						this.model.like = '';
+						this.model.handset = '';
+						//退出编辑状态
+						this.isEdit = false;
+					},
+					save: function() {
+						if (this.state) {
+							//算出新的id，赋值给model.id
+							this.model.id = this.message[this.message.length - 1].id + 1;
+							//把model push到message中
+							this.message.push(this.model);
+							//重置表单
+							this.model = {
+								id: 0,
+								name: '',
+								age: '',
+								like: '',
+								handset: ''
+							};
+							//退出编辑状态
+							this.isEdit = false;
+							//提示用户 新增成功
+							alert('添加成功');
+						} else {
+							this.message[this.index] = this.model;
+							this.model = {
+								id: 0,
+								name: '',
+								age: '',
+								like: '',
+								handset: ''
+							};
+							this.isEdit = false;
+							//提示用户 修改成功
+							alert('修改成功');
+						}
+					}
+				}
+			})
+		</script>
+	</body>
+</html>

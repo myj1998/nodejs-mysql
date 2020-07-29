@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title></title>
+		<style type="text/css">
+			.count {
+				display: flex;
+				align-items: center;
+			}
+
+			span.checkbox {
+				display: inline-block;
+				width: 24px;
+				height: 24px;
+				background: url(img/icon_checkbox_uncheck.png);
+				background-size: 100% 100%;
+			}
+
+			span.checkbox.checked {
+				background: url(img/icon_checkbox_check.png);
+				background-size: 100% 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="root">
+			<ul>
+				<li v-for="item in list" :key='item.id'>
+					<span class="checkbox" :class="{ checked: item.checked }" @click="item.checked = !item.checked"></span>
+					<span v-text="item.produtName"></span>
+					<span> ￥{{item.produtPrice}} 元</span>
+					<div class="count">
+						<input type="button" value="-" :disabled="item.count == 1" @click="item.count = item.count - 1" />
+						<span v-text="item.count"></span>
+						<input type="button" value="+" :disabled="item.count == 10" @click="item.count = item.count + 1" />
+					</div>
+					<a href="#">删除</a>
+				</li>
+			</ul>
+			<span class="checkbox" :class="{ checked: allChecked}" @click="toggleAll"></span>全选
+			总金额：<span v-text="account"></span>
+			<button>结算(<span v-text="total"></span>)</button>
+		</div>
+
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			new Vue({
+				el: '#root',
+				data: {
+					list: [{
+							id: 1,
+							produtName: '杯子',
+							produtPrice: 20,
+							count: 2,
+							checked: true
+						},
+						{
+							id: 2,
+							produtName: '键盘',
+							produtPrice: 120,
+							count: 1,
+							checked: true
+						},
+						{
+							id: 3,
+							produtName: '鼠标',
+							produtPrice: 80,
+							count: 1,
+							checked: true
+						}
+					]
+				},
+				// 计算属性
+				// 特点:看起来像是一个函数,用起来像一个data中的数据
+				// 特点:计算属性的函数必须显式的return一个值
+				// 计算属性就是把data中的数据进行一定的逻辑计算得到一个新的值给页面用
+				// 计算属性的优点:计算的过程中用到的数据,称之为计算属性的依赖数据,依赖数据发生改变则,计算属性对应的函数自动调用重新求值
+				// 计算属性绝对不能进行赋值,只能间接修改计算属性以来的数据,从而影响计算属性的值
+
+				computed: {
+					allChecked: function() {
+						for (var i = 0; i < this.list.length; i++) {
+							if (!this.list[i].checked) return false;
+						}
+						return true;
+					},
+					account: function() {
+						var result = 0;
+						for (var i = 0; i < this.list.length; i++) {
+							if (this.list[i].checked) result += this.list[i].produtPrice * this.list[i].count;
+						}
+						return result;
+					},
+					total: function() {
+						var result = 0;
+						for (var i = 0; i < this.list.length; i++) {
+							if (this.list[i].checked) result += this.list[i].count;
+						}
+						return result;
+					}
+
+				},
+				methods: {
+					toggleAll: function() {
+						var b = !this.allChecked;
+						this.list.forEach(function(item) {
+							item.checked = b;
+						})
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

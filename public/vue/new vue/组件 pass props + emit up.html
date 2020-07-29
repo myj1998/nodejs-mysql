@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<style type="text/css">
+			.blog-post {
+				display: flex;
+				align-items: center;
+				justify-content: space-between;
+				border: 1px solid #E5E5E5;
+				margin: 10px;
+				padding: 20px;
+			}
+
+			.blog-post .left {
+				margin-right: 30px;
+				padding: 6px;
+				border: 1px solid #EEEEEE;
+			}
+
+			.blog-post .left img {
+				display: block;
+			}
+
+			.blog-post .right {
+				flex: 1;
+			}
+
+			.blog-post .right h3 {
+				margin-top: 0;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div id="app">
+			<div class="list">
+				<!-- v-bind: 可以简写为":"动态绑定属性-->
+				<blog-post v-for="item in blogs" @enlarge="handleEnlarge(item,$event)" :title="item.title" :size="item.fontSize" :summary="item.des" :pop="item.img"></blog-post>
+			</div>
+		</div>
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			Vue.component("blog-post", {
+				// data:组件内部数据
+				data:function(){
+					return {}
+				},
+				// props:传递外部数据
+				props: ['title', 'summary', 'pop', 'size'],
+				methods: {
+					handleClick: function(){
+						var x = Math.random() * 4;
+						this.$emit('enlarge', x);
+					}
+				},
+				computed: {},
+				template: `
+				<div class="blog-post">
+					<div class="left">
+						<img :src="pop" width="100" />
+					</div>
+					<div class="right">
+						<h3 class="title" :style="{fontSize:size + 'px'}">{{title}}</h3>
+						<div class="description">{{summary}}</div>
+					</div>
+					<button @click="handleClick" type="button">+</button>
+				</div>`
+			});
+
+			let app = new Vue({
+				el: '#app',
+				data: {
+					blogs: [{
+						id: 1,
+						title: 'Javascript DOM常用尺寸',
+						fontSize: 18,
+						img: './img/0.jpg',
+						des: '康复科借款方喷雾瓶我饿噢诶'
+					}, {
+						id: 2,
+						title: 'React框架设计思想',
+						fontSize: 18,
+						img: './img/avatar.png',
+						des: '就狂热欧体偶尔客家人可调节'
+					}, {
+						id: 3,
+						title: '背景图定位与背景颜色',
+						fontSize: 18,
+						img: './img/avatar.png',
+						des: '婆婆奇葩为i惹急人孔盖的客服没买呢，才能'
+					}, {
+						id: 4,
+						title: 'Vue基础指令解析',
+						fontSize: 18,
+						img: './img/0.jpg',
+						des: '请勿让若干个封禅大典保驾护航重新注册'
+					}],
+				},
+				methods: {
+					handleEnlarge: function(item,x){
+						
+						item.fontSize += x;
+					}
+				}
+			});
+		</script>
+	</body>
+
+</html>

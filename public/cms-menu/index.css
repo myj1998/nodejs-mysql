@@ -1,0 +1,15 @@
+ul.cms-menu {}
+
+ul.cms-menu>li {
+	text-indent: 40px;
+	height: 40px;
+	line-height: 40px;
+}
+
+ul.cms-menu>li>a {
+	color: #000000;
+}
+
+ul.cms-menu>li>a.router-link-active {
+	color: red;
+}

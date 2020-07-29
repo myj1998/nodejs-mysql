@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+	</head>
+	<body>
+		<div id="root">
+			<span>今天是：{{name}}</span>
+			<span v-text="'今天是: ' + name"></span>
+			<!-- 上面俩看场合分别使用 -->
+			<!-- v-on: 的简写 @ -->
+			<input type="button" value="改变值" @click="clickHandler" />
+
+			<!-- vue对事件绑定内部做了优化：如果绑定事件的时候提供的是一个函数，那么直接绑，如果不是一个函数而是一段可执行
+			的代码，则vue会自动在外部封装一个匿名函数再把这个匿名函数绑在事件上！且这个匿名函数的形参规定是$event，
+			表示事件对象如下方 -->
+			<input type="button" value="改变值(传参)" @click="function($event){clickHandler1('星期天')} " />
+			<!-- 下面是上面的简写 -->
+			<input type="button" value="改变值(传参)" @click="clickHandler1('星期天')" />
+
+			<input type="button" value="改变值(传参/传事件对象)" @click="function($event){clickHandler2($event, '星期天')}" />
+			<!-- 下面是上面的简写 -->
+			<input type="button" value="改变值(传参/传事件对象)" @click="clickHandler2($event, '星期天')" />
+			<!-- clickHandler1(事件对象固定写法$event,'参数') -->
+
+			<img :src='imgPath' />
+			<!-- v-bind: 可以简写为 : -->
+		</div>
+
+		<script src="../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//潜规则：一般被new的函数首字母都会大写
+			//vue的特点：数据驱动，通过驱动数据来驱动dom
+			//vue开发的第一个优点：基本上再也看不见任何dom操作了
+			new Vue({
+				el: '#root',
+				data: {
+					name: '星期一',
+					imgPath: '0.jpg'
+				},
+				methods: {
+					clickHandler: function(e) {
+						// e形参可以随便写
+						console.log(e)
+						// clickHandler自己定义的
+						this.name = '星期二'
+					},
+					clickHandler1: function(a) {
+						this.name = a;
+					},
+					clickHandler2: function(b, a) {
+						console.log(b);
+						this.name = a;
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

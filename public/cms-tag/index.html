@@ -1,0 +1,28 @@
+<div class="cmsTag_content">
+	<table border="" cellspacing="" cellpadding="">
+		<caption>
+			<h1>标签列表</h1>
+			<a href="javascript:void(0)" @click="addEnter">增加</a>
+		</caption>
+		<thead>
+			<tr>
+				<th>id</th>
+				<th>标签名</th>
+				<th>操作</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr v-for="item in list" :key="item.id">
+				<td v-text="item.id"></td>
+				<td v-text="item.name"></td>
+				<td>
+					<a href="javascript:void(0)" @click="remove(item.id)">删除</a>
+					<a href="javascript:void(0)">修改</a>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<div class="edit-content">
+		
+	</div>
+</div>

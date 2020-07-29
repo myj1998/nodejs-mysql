@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>组件的使用:计数器</title>
+		<style type="text/css">
+			.counter {
+				display: flex;
+				align-items: center;
+				width: 200px;
+			}
+
+			.counter .decrease,
+			.counter .increase {
+				padding: 6px 20px;
+				border: 1px solid #999999;
+				border-radius: 3px;
+				font-size: 18px;
+			}
+
+			.counter .decrease {
+				border-top-right-radius: 0px;
+				border-bottom-right-radius: 0px;
+			}
+
+			.counter .increase {
+				border-top-left-radius: 0px;
+				border-bottom-left-radius: 0px;
+			}
+
+			.counter .number {
+				padding: 6px;
+				text-align: center;
+				min-width: 100px;
+				border-top: 1px solid #999;
+				border-bottom: 1px solid #999;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="app">
+			<counter :value="num" min="1" @up="headup" @down="headdown" step='2'></counter>
+		</div>
+
+		<script src="../../js/vue.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			//定义组件
+			Vue.component('counter', {
+				//props   外部数据       
+				props: ['value', 'min', 'max', 'step'],
+				methods: {
+					headincrease: function() {
+
+						this.$emit('up', this.step);
+					},
+					headdecrease: function() {
+						if (this.value <= this.min) {
+							return;
+						}
+						this.$emit('down', this.step);
+					},
+
+				},
+				template: `<div class="counter">
+				<button @click="headdecrease"   type="button" class="decrease">-</button>
+				<span class="number">{{value}}</span>
+				<button  @click="headincrease"   type="button" class="increase">+</button>
+			</div>`
+			});
+			var app = new Vue({
+				el: "#app",
+				data: {
+					num: 2,
+				},
+				methods: {
+					headup: function() {
+						this.num++;
+					},
+					headdown: function() {
+						this.num--;
+					},
+
+				}
+			});
+		</script>
+	</body>
+</html>
